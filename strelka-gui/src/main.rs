@@ -1,5 +1,6 @@
 mod application;
 mod message;
+mod rich_text;
 
 use crate::application::Strelka;
 
