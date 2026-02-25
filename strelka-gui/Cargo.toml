@@ -12,6 +12,10 @@ path = "src/main.rs"
 git = "https://github.com/iced-rs/iced.git"
 features = ["canvas", "advanced"]
 
+[dependencies.cosmic-text]
+git = "https://github.com/pop-os/cosmic-text.git"
+rev = "a07a6190548c8e40a55f6b7761387047ff1bf6ff"
+
 [dependencies.anyhow]
 workspace = true
 

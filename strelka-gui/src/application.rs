@@ -1,12 +1,13 @@
 use iced::widget::{center, container};
-use iced::{Color, Element, Length, Subscription, Task};
+use iced::{Color, Element, Length, Subscription, Task, Font};
 
 use crate::message::{self, Message};
-use crate::rich_text::{self, ImageSpan, InlineSpan, Paragraph, RichLayout, TextSpan};
+use crate::widget::rich_text::{self, ImageSpan, InlineSpan, Paragraph, RichLayout, TextSpan};
 use tracing::{debug, info};
 
 pub struct Strelka {
     window_id: iced::window::Id,
+    layout: RichLayout<'static>,
 }
 
 impl Strelka {
@@ -21,9 +22,81 @@ impl Strelka {
                 .map(|_| Message::Window(message::WindowMessage::InitializedMainWindow)),
         ];
 
+        // Static text used in the demo layout.
+        let lorem_1: &'static str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
+        Curabitur blandit tempus porttitor. Integer posuere erat a ante venenatis dapibus.";
+
+        let lorem_2: &'static str = "Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. \
+        Cras mattis consectetur purus sit amet fermentum.";
+
+        let default_font = Font::default();
+
+        let mut layout: RichLayout<'static> = RichLayout::new(vec![
+            Paragraph::new(vec![InlineSpan::Text(TextSpan {
+                text: "Meeting notes — Project Saturn",
+                size: 22.0,
+                color: Color::from_rgb(0.1, 0.1, 0.1),
+                font: default_font,
+                bold: false,
+                italic: false,
+            })]),
+            Paragraph::new(vec![
+                InlineSpan::Text(TextSpan {
+                    text: "Tag: ",
+                    size: 14.0,
+                    color: Color::from_rgb(0.3, 0.3, 0.3),
+                    font: default_font,
+                    bold: false,
+                    italic: false,
+                }),
+                InlineSpan::Image(ImageSpan {
+                    width: 36.0,
+                    height: 16.0,
+                    color: Color::from_rgb(0.85, 0.9, 1.0),
+                }),
+                InlineSpan::Text(TextSpan {
+                    text: "  design, planning",
+                    size: 14.0,
+                    color: Color::from_rgb(0.4, 0.4, 0.4),
+                    font: default_font,
+                    bold: false,
+                    italic: false,
+                }),
+            ]),
+            Paragraph::new(vec![InlineSpan::Text(TextSpan {
+                text: lorem_1,
+                size: 16.0,
+                color: Color::from_rgb(0.15, 0.15, 0.15),
+                font: default_font,
+                bold: false,
+                italic: false,
+            })]),
+            Paragraph::new(vec![
+                InlineSpan::Text(TextSpan {
+                    text: "Important: ",
+                    size: 16.0,
+                    color: Color::from_rgb(0.8, 0.3, 0.0),
+                    font: default_font,
+                    bold: false,
+                    italic: false,
+                }),
+                InlineSpan::Text(TextSpan {
+                    text: lorem_2,
+                    size: 16.0,
+                    color: Color::from_rgb(0.15, 0.15, 0.15),
+                    font: default_font,
+                    bold: true,
+                    italic: true,
+                }),
+            ]),
+        ]);
+
+        layout.paragraph_spacing = 10.0;
+
         (
             Self {
                 window_id: main_window_id,
+                layout,
             },
             Task::batch(tasks),
         )
@@ -51,62 +124,8 @@ impl Strelka {
     }
 
     pub fn view(&self, _window_id: iced::window::Id) -> Element<'_, Message> {
-        let lorem_1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
-        Curabitur blandit tempus porttitor. Integer posuere erat a ante venenatis dapibus.";
-
-        let lorem_2 = "Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. \
-        Cras mattis consectetur purus sit amet fermentum.";
-
-        let layout = {
-            let mut layout = RichLayout::new(vec![
-                Paragraph::new(vec![InlineSpan::Text(TextSpan {
-                    text: "Meeting notes – Project Apollo",
-                    size: 20.0,
-                    color: Color::from_rgb(0.1, 0.1, 0.1),
-                })]),
-                Paragraph::new(vec![
-                    InlineSpan::Text(TextSpan {
-                        text: "Tag: ",
-                        size: 14.0,
-                        color: Color::from_rgb(0.3, 0.3, 0.3),
-                    }),
-                    InlineSpan::Image(ImageSpan {
-                        width: 36.0,
-                        height: 16.0,
-                        color: Color::from_rgb(0.85, 0.9, 1.0),
-                    }),
-                    InlineSpan::Text(TextSpan {
-                        text: "  design, planning",
-                        size: 14.0,
-                        color: Color::from_rgb(0.4, 0.4, 0.4),
-                    }),
-                ]),
-                Paragraph::new(vec![InlineSpan::Text(TextSpan {
-                    text: lorem_1,
-                    size: 16.0,
-                    color: Color::from_rgb(0.15, 0.15, 0.15),
-                })]),
-                Paragraph::new(vec![
-                    InlineSpan::Text(TextSpan {
-                        text: "Important: ",
-                        size: 16.0,
-                        color: Color::from_rgb(0.8, 0.3, 0.0),
-                    }),
-                    InlineSpan::Text(TextSpan {
-                        text: lorem_2,
-                        size: 16.0,
-                        color: Color::from_rgb(0.15, 0.15, 0.15),
-                    }),
-                ]),
-            ]);
-
-            layout.paragraph_spacing = 10.0;
-
-            layout
-        };
-
         center(
-            container(rich_text::rich_text(layout))
+            container(rich_text::editor_renderer::<Message, _>(self.layout.clone()))
                 .width(Length::Fixed(600.0))
                 .padding(16.0),
         )

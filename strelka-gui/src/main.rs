@@ -1,6 +1,7 @@
 mod application;
 mod message;
 mod rich_text;
+mod widget;
 
 use crate::application::Strelka;
 
