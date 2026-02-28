@@ -1,5 +1,5 @@
 use iced::widget::{center, container};
-use iced::{Color, Element, Length, Subscription, Task, Font};
+use iced::{Color, Element, Font, Length, Subscription, Task};
 
 use crate::message::{self, Message};
 use crate::widget::rich_text::{self, ImageSpan, InlineSpan, Paragraph, RichLayout, TextSpan};
@@ -78,7 +78,7 @@ impl Strelka {
                     color: Color::from_rgb(0.8, 0.3, 0.0),
                     font: default_font,
                     bold: false,
-                    italic: false,
+                    italic: true,
                 }),
                 InlineSpan::Text(TextSpan {
                     text: lorem_2,
@@ -125,9 +125,11 @@ impl Strelka {
 
     pub fn view(&self, _window_id: iced::window::Id) -> Element<'_, Message> {
         center(
-            container(rich_text::editor_renderer::<Message, _>(self.layout.clone()))
-                .width(Length::Fixed(600.0))
-                .padding(16.0),
+            container(rich_text::editor_renderer::<Message, _>(
+                self.layout.clone(),
+            ))
+            .width(Length::Fixed(600.0))
+            .padding(16.0),
         )
         .into()
     }

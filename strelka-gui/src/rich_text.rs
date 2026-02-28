@@ -8,26 +8,20 @@ use std::marker::PhantomData;
 use std::sync::{Mutex, OnceLock};
 
 use cosmic_text::{
-    Attrs,
-    Buffer,
-    Family as CtFamily,
-    FontSystem,
-    Metrics,
-    Shaping,
-    Style as CtStyle,
+    Attrs, Buffer, Family as CtFamily, FontSystem, Metrics, Shaping, Style as CtStyle,
     Weight as CtWeight,
 };
 
+use iced::advanced::Renderer as _;
 use iced::advanced::layout::{self, Layout};
 use iced::advanced::renderer;
 use iced::advanced::text as core_text;
+use iced::advanced::text::Renderer as _;
 use iced::advanced::widget::{self, Widget};
 use iced::alignment;
+use iced::font::{Family as IcedFamily, Style as FontStyle, Weight as FontWeight};
 use iced::mouse;
-use iced::advanced::Renderer as _;
-use iced::advanced::text::Renderer as _;
-use iced::{Color, Element, Length, Pixels, Point, Rectangle, Renderer, Size, Theme, Font};
-use iced::font::{Family as IcedFamily, Weight as FontWeight, Style as FontStyle};
+use iced::{Color, Element, Font, Length, Pixels, Point, Rectangle, Renderer, Size, Theme};
 
 /// Layout model for rich text. Zero-copy: it borrows all string slices.
 #[derive(Clone)]
