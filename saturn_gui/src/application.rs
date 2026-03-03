@@ -1,6 +1,7 @@
 use iced::widget::{center, container};
 use iced::{Color, Element, Font, Length, Subscription, Task};
 
+use crate::APP_ICON;
 use crate::message::{self, Message};
 use crate::widget::rich_text::{self, ImageSpan, InlineSpan, Paragraph, RichLayout, TextSpan};
 use tracing::{debug, info};
@@ -12,10 +13,17 @@ pub struct Application {
 
 impl Application {
     pub fn new() -> (Self, Task<Message>) {
-        let (main_window_id, open_main_window) = iced::window::open(iced::window::Settings {
+        let icon = if let Ok(icon) = iced::window::icon::from_file_data(APP_ICON, None) {
+            Some(icon)
+        } else {
+            None
+        };
+        let settings = iced::window::Settings {
             exit_on_close_request: false,
-            ..iced::window::Settings::default()
-        });
+            icon,
+            ..Default::default()
+        };
+        let (main_window_id, open_main_window) = iced::window::open(settings);
 
         let tasks = vec![
             open_main_window

@@ -10,7 +10,7 @@ path = "src/main.rs"
 
 [dependencies.iced]
 git = "https://github.com/iced-rs/iced.git"
-features = ["canvas", "advanced"]
+features = ["canvas", "advanced", "image"]
 
 [dependencies.cosmic-text]
 git = "https://github.com/pop-os/cosmic-text.git"
@@ -21,3 +21,6 @@ workspace = true
 
 [dependencies.tracing]
 workspace = true
+
+[build-dependencies.winresource]
+version = "0.1"
