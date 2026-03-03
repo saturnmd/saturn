@@ -5,12 +5,12 @@ use crate::message::{self, Message};
 use crate::widget::rich_text::{self, ImageSpan, InlineSpan, Paragraph, RichLayout, TextSpan};
 use tracing::{debug, info};
 
-pub struct Strelka {
+pub struct Application {
     window_id: iced::window::Id,
     layout: RichLayout<'static>,
 }
 
-impl Strelka {
+impl Application {
     pub fn new() -> (Self, Task<Message>) {
         let (main_window_id, open_main_window) = iced::window::open(iced::window::Settings {
             exit_on_close_request: false,
@@ -135,7 +135,7 @@ impl Strelka {
     }
 
     pub fn title(&self, _window_id: iced::window::Id) -> String {
-        String::from("Strelka")
+        String::from("Saturn")
     }
 
     fn exit(&mut self) -> Task<Message> {

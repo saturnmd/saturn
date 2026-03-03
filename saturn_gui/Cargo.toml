@@ -1,11 +1,11 @@
 [package]
-name = "strelka-gui"
+name = "saturn_gui"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
 
 [[bin]]
-name = "strelka"
+name = "saturn"
 path = "src/main.rs"
 
 [dependencies.iced]
